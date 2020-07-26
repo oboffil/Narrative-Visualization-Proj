@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<script src="https://d3js.org/d3.v4.js"></script>
+
+
+<body class="w3-content" style="max-width:1200px">
+
+<!-- First Grid: Logo & About -->
+<div class="w3-row">
+<div class="w3-half w3-container">
+  <h1 class="w3-jumbo">Stock Market and The COVID - 19</h1>
+  <div id="chart"></div>
+</div>
+<div class="w3-half w3-container w3-xlarge w3-text-grey">
+  <p class="">COVID 19 has created a lot of problems in the economy. 
+    That problem is reflected in the stock market, as we can see in the chart. 
+    It shows the movement of the S&P 500 this year with the COVID, and at the same time last year, 
+    you can click in here to see the different scenes that demonstrate the effect.</p>
+    <button onclick="update(data1)">S&P 500 in COVID 19</button>
+
+    <button onclick="update(data2)">S&P 500 in normal time</button>
+  <p>As you can appreciate by month 7(July), the S&P 500 still at the same levels that were last year, 
+    but the history of this index tells us that it grows an average of  8% every year. So clearly we 
+    can see the impact of the COVID 19 in the economy. </p>
+
+</div>
+
+<a href="Covid_19.html">Go Back</a>
+
+</div>
+
+<script>
+
+    var data1 = [
+       {ser1: 1, ser2: 3225.52},
+       {ser1: 2, ser2: 2954.22},
+       {ser1: 3, ser2: 2584.59},
+       {ser1: 4, ser2: 2912.43},
+       {ser1: 5, ser2: 3044.31},
+       {ser1: 6, ser2: 3100.29},
+       {ser1: 7, ser2: 3215.62}
+       
+    ];
+    
+    var data2 = [
+       {ser1: 1, ser2: 2704.10},
+       {ser1: 2, ser2: 2784.49},
+       {ser1: 3, ser2: 2834.39},
+       {ser1: 4, ser2: 2945.83},
+       {ser1: 5, ser2: 2752.06},
+       {ser1: 6, ser2: 2941.76},
+       {ser1: 7, ser2: 3019.56}
+    ];
+    
+    
+    var margin = {top: 10, right: 30, bottom: 30, left: 50},
+        width = 460 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+    
+    
+    var svg = d3.select("#chart")
+      .append("svg")
+        .attr("width", width + margin.left + margin.right )
+        .attr("height", height + margin.top + margin.bottom )
+      .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+
+
+    var x = d3.scaleLinear().range([0,width]);
+    var xAxis = d3.axisBottom().scale(x);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .attr("class","myXaxis")
+    
+    
+    var y = d3.scaleLinear().range([height, 0]);
+    var yAxis = d3.axisLeft().scale(y);
+    svg.append("g")
+      .attr("class","myYaxis")
+    
+
+    
+    function update(data) {
+    
+      
+      x.domain([0, d3.max(data, function(d) { return d.ser1 }) ]);
+      svg.selectAll(".myXaxis").transition()
+        .duration(3000)
+        .call(xAxis);
+    
+      
+      y.domain([0, d3.max(data, function(d) { return d.ser2  }) ]);
+      svg.selectAll(".myYaxis")
+        .transition()
+        .duration(3000)
+        .call(yAxis);
+    
+      
+      var u = svg.selectAll(".lineTest")
+        .data([data], function(d){ return d.ser1 });
+    
+      
+      u
+        .enter()
+        .append("path")
+        .attr("class","lineTest")
+        .merge(u)
+        .transition()
+        .duration(3000)
+        .attr("d", d3.line()
+          .x(function(d) { return x(d.ser1); })
+          .y(function(d) { return y(d.ser2); }))
+          .attr("fill", "none")
+          .attr("stroke", "steelblue")
+          .attr("stroke-width", 2.5)
+    }
+   
+    update(data1)
+    
+    </script>
+
+
+</div>
+<div class="w3-row">
+<div class="w3-half w3-container">
+  
+
+<!-- Footer -->
+<div class="w3-row w3-section">
+  <a href="SP500_file.html">Start</a>
+</div>
+
+</body>
+</html>
