@@ -1,98 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <script src="https://d3js.org/d3.v4.js"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<button onclick="update(data1)">Dataset 1</button>
-<button onclick="update(data2)">Dataset 2</button>
-<div id="my_dataviz"></div>
+<html>
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<script src="https://d3js.org/d3.v4.js"></script>
+
+
+<body class="w3-content" style="max-width:1200px">
+
+<!-- First Grid: Logo & About -->
+<div class="w3-row">
+<div class="w3-half w3-container">
+  <h1 class="w3-jumbo">COVID 19 & The U.S Economy</h1>
+  <div id="SP"></div>
+</div>
+<div class="w3-half w3-container w3-xlarge w3-text-grey">
+</div>
+</div>
 <script>
 
-    // Create 2 datasets
-    var data1 = [
-       {ser1: 0.3, ser2: 4},
-       {ser1: 2, ser2: 16},
-       {ser1: 3, ser2: 8}
-    ];
     
-    var data2 = [
-       {ser1: 1, ser2: 7},
-       {ser1: 4, ser2: 1},
-       {ser1: 6, ser2: 8}
-    ];
-    
-    // set the dimensions and margins of the graph
-    var margin = {top: 10, right: 30, bottom: 30, left: 50},
-        width = 460 - margin.left - margin.right,
+    var margin = {top: 20, right: 1, bottom: 30, left: 35},
+        width = 800 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
     
-    // append the svg object to the body of the page
-    var svg = d3.select("#my_dataviz")
+
+    var svg = d3.select("#SP")
       .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
-      .append("g")
+        .append("g")
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
     
-    // Initialise a X axis:
-    var x = d3.scaleLinear().range([0,width]);
-    var xAxis = d3.axisBottom().scale(x);
-    svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .attr("class","myXaxis")
+    d3.csv("2_years_SP_500.csv",
+      function(d){
+        return { Date : d3.timeParse("%Y-%m-%d")(d.Date), Close : d.Close }
+      },
     
-    // Initialize an Y axis
-    var y = d3.scaleLinear().range([height, 0]);
-    var yAxis = d3.axisLeft().scale(y);
-    svg.append("g")
-      .attr("class","myYaxis")
+  
+      function(data) {
     
-    // Create a function that takes a dataset as input and update the plot:
-    function update(data) {
+        var x = d3.scaleTime()
+          .domain(d3.extent(data, function(d) { return d.Date; }))
+          .range([ 0, width ]);
+        svg.append("g")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(x));
     
-      // Create the X axis:
-      x.domain([0, d3.max(data, function(d) { return d.ser1 }) ]);
-      svg.selectAll(".myXaxis").transition()
-        .duration(3000)
-        .call(xAxis);
+ 
+        var y = d3.scaleLinear()
+          .domain([0, d3.max(data, function(d) { return +d.Close; })])
+          .range([ height, 0 ]);
+        svg.append("g")
+          .call(d3.axisLeft(y));
+
+        svg.append("path")
+          .datum(data)
+          .attr("fill", "#cce5df")
+          .attr("stroke", "#69b3a2")
+          .attr("stroke-width", 1.5)
+          .attr("d", d3.area()
+            .x(function(d) { return x(d.Date) })
+            .y0(y(0))
+            .y1(function(d) { return y(d.Close) })
+            )
     
-      // create the Y axis
-      y.domain([0, d3.max(data, function(d) { return d.ser2  }) ]);
-      svg.selectAll(".myYaxis")
-        .transition()
-        .duration(3000)
-        .call(yAxis);
-    
-      // Create a update selection: bind to the new data
-      var u = svg.selectAll(".lineTest")
-        .data([data], function(d){ return d.ser1 });
-    
-      // Updata the line
-      u
-        .enter()
-        .append("path")
-        .attr("class","lineTest")
-        .merge(u)
-        .transition()
-        .duration(3000)
-        .attr("d", d3.line()
-          .x(function(d) { return x(d.ser1); })
-          .y(function(d) { return y(d.ser2); }))
-          .attr("fill", "none")
-          .attr("stroke", "steelblue")
-          .attr("stroke-width", 2.5)
-    }
-    
-    // At the beginning, I run the update function on the first dataset:
-    update(data1)
+    })
     
     </script>
 
-<body>
-    
+
+
+</div>
+<div class="w3-row">
+    <a href="Covid_19.html">Let's tell the story</a>
+<div class="w3-half w3-container">
+  
+
+<!-- Footer -->
+<div class="w3-row w3-section">
+</div>
+
 </body>
 </html>
