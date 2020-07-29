@@ -12,19 +12,18 @@
 
 <body class="w3-content" style="max-width:1200px">
 
-<!-- First Grid: Logo & About -->
 <div class="w3-row">
 <div class="w3-half w3-container">
-  <h1 class="w3-jumbo">U.S COVID - 19 CASES</h1>
+  <h1 class="w3-jumbo">U.S COVID - 19 CASES BY MONTH</h1>
   <div id="id_chart"></div>
 </div>
 <div class="w3-half w3-container w3-xlarge w3-text-grey">
   <p class="">The number of COVID 19 cases has increased in the United States exponentially 
-      since the beginning of the pandemic. As you can appreciate in the chart, the cases keep 
+      since the beginning of the pandemic. As you can appreciate in the chart when you point it, the cases keep 
       rising each month since January. The epidemic is affecting the country's economy dramatically. 
       A simple example of how this has affected the country's growth can be fount <a href="real.html">here</a>. 
       Where we evaluated the S&P 500 to show how the country is at the same level than 
-      last year at the same time instead of being higher as it was expected   </p>
+      last year at the same time instead of being higher as it was expected </p>
 </div>
 <a href="real.html">S&P 500 Evaluation</a>
 <a href="index.html">Start</a>
@@ -33,12 +32,12 @@
 <script>
 
 
-    // set the dimensions and margins of the graph
+ 
     var margin = {top: 10, right: 30, bottom: 90, left: 60},
         width = 460 - margin.left - margin.right,
         height = 450 - margin.top - margin.bottom;
     
-    // append the svg object to the body of the page
+   
     var svg = d3.select("#id_chart")
       .append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -47,10 +46,10 @@
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
     
-    // Parse the Data
+    
     d3.csv("owid-covid-data.csv", function(data) {
     
-    // X axis
+    
     var x = d3.scaleBand()
       .range([ 0, width ])
       .domain(data.map(function(d) { return d.month; }))
@@ -77,8 +76,10 @@
         .attr("x", function(d) { return x(d.month); })
         .attr("width", x.bandwidth())
         .attr("fill", "#69b3a2")
+        .append("svg:title")
+        .text(function(d) { return d.total_deaths; })
         // no bar at the beginning thus:
-        .attr("height", function(d) { return height - y(0); }) // always equal to 0
+        .attr("height", function(d) { return height - y(0); }) 
         .attr("y", function(d) { return y(0); })
     
     // Animation
@@ -99,11 +100,5 @@
 <div class="w3-row">
 <div class="w3-half w3-container">
   
-
-<!-- Footer -->
-<div class="w3-row w3-section">
-    
-</div>
-
 </body>
 </html>

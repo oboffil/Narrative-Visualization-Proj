@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
 
 
 <script src="https://d3js.org/d3.v4.js"></script>
@@ -12,50 +13,50 @@
 
 <body class="w3-content" style="max-width:1200px">
 
-<!-- First Grid: Logo & About -->
-<div class="w3-row">
-<div class="w3-half w3-container">
-  <h1 class="w3-jumbo">COVID 19 & The U.S Economy</h1>
-  <div id="SP"></div>
-</div>
-<div class="w3-half w3-container w3-xlarge w3-text-grey">
-</div>
-</div>
-<script>
+  
+  <div class="w3-row">
+    <div class="w3-half w3-container">
+      <h1 class="w3-jumbo">COVID 19 & The U.S Economy</h1>
+      <div id="SP"></div>
+  </div>
 
-    
-    var margin = {top: 20, right: 1, bottom: 30, left: 35},
-        width = 800 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
-    
+  <svg width="460" height="600" id="ch"></svg>
+
+  <script>
+
+
+    var margin = { top: 20, right: 1, bottom: 30, left: 35 },
+      width = 800 - margin.left - margin.right,
+      height = 400 - margin.top - margin.bottom;
+
 
     var svg = d3.select("#SP")
       .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform",
-              "translate(" + margin.left + "," + margin.top + ")");
-    
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
+
     d3.csv("2_years_SP_500.csv",
-      function(d){
-        return { Date : d3.timeParse("%Y-%m-%d")(d.Date), Close : d.Close }
+      function (d) {
+        return { Date: d3.timeParse("%Y-%m-%d")(d.Date), Close: d.Close }
       },
-    
-  
-      function(data) {
-    
+
+
+      function (data) {
+
         var x = d3.scaleTime()
-          .domain(d3.extent(data, function(d) { return d.Date; }))
-          .range([ 0, width ]);
+          .domain(d3.extent(data, function (d) { return d.Date; }))
+          .range([0, width]);
         svg.append("g")
           .attr("transform", "translate(0," + height + ")")
           .call(d3.axisBottom(x));
-    
- 
+
+
         var y = d3.scaleLinear()
-          .domain([0, d3.max(data, function(d) { return +d.Close; })])
-          .range([ height, 0 ]);
+          .domain([0, d3.max(data, function (d) { return +d.Close; })])
+          .range([height, 0]);
         svg.append("g")
           .call(d3.axisLeft(y));
 
@@ -65,26 +66,111 @@
           .attr("stroke", "#69b3a2")
           .attr("stroke-width", 1.5)
           .attr("d", d3.area()
-            .x(function(d) { return x(d.Date) })
+            .x(function (d) { return x(d.Date) })
             .y0(y(0))
-            .y1(function(d) { return y(d.Close) })
-            )
-    
-    })
-    
-    </script>
+            .y1(function (d) { return y(d.Close) })
+          )
+
+      });
+
+      const annotations = [
+  {
+    note: {
+      label: "S&P 500 index after COVID - 19 in U.S",
+      align: "middle",  
+      wrap: 200,  
+      padding: 10   
+    },
+    color: ["#2E4053"],
+    x: 50,
+    y: 350,
+    dy: 100,
+    dx: 260
+  }
+]
+
+// Add annotation to the chart
+const makeAnnotations = d3.annotation()
+  .annotations(annotations)
+d3.select("#ch")
+  .append("g")
+  .call(makeAnnotations)
+
+//////////////////////////////////////////////////////////    
+
+const annotations2 = [
+  {
+    note: {
+      label: "S&P 500 index before COVID - 19 in U.S",
+      align: "middle", 
+      wrap: 200,  
+      padding: 10  
+    },
+    color: ["#2E4053"],
+    x: 10,
+    y: 230,
+    dy: -100,
+    dx: 75,
+    subject: { radius: 50, radiusPadding: 10 },
+  }
+]
+
+// Add annotation to the chart
+const makeAnnotations2 = d3.annotation()
+  .annotations(annotations2)
+d3.select("#ch")
+  .append("g")
+  .call(makeAnnotations2)
 
 
 
-</div>
-<div class="w3-row">
+///////////////////////////////////////////////////////////
+
+const annotations3 = [
+  {
+    note: {
+      label: "S&P 500 index Expected value by July in U.S",
+      align: "middle", 
+      wrap: 200,  
+      padding: 10  
+    },
+
+    connector: {
+      end: "dot",        
+      type: "line",      
+      lineType : "vertical", 
+      endScale: 5 
+    },
+    color: ["#2E4053"],
+    x: 218,
+    y: 180,
+    dy: 30,
+    dx: 100,
+    subject: { radius: 50, radiusPadding: 10 },
+  }
+]
+
+// Add annotation to the chart
+const makeAnnotations3 = d3.annotation()
+  .annotations(annotations3)
+d3.select("#ch")
+  .append("g")
+  .call(makeAnnotations3)
+
+  </script>
+
+
+
+  </div>
+  <div class="w3-row">
     <a href="Covid_19.html">Let's tell the story</a>
-<div class="w3-half w3-container">
-  
+    <div class="w3-half w3-container">
 
-<!-- Footer -->
-<div class="w3-row w3-section">
-</div>
+
+      <!-- Footer -->
+      <div class="w3-row w3-section">
+      </div>
 
 </body>
+
 </html>

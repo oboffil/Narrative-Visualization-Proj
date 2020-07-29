@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
 
 
 <script src="https://d3js.org/d3.v4.js"></script>
@@ -12,23 +13,29 @@
 
 <body class="w3-content" style="max-width:1200px">
 
-<!-- First Grid: Logo & About -->
 <div class="w3-row">
+ 
 <div class="w3-half w3-container">
   <h1 class="w3-jumbo">Stock Market and The COVID - 19</h1>
   <div id="chart"></div>
 </div>
-<div class="w3-half w3-container w3-xlarge w3-text-grey">
+<svg width="460" height="600" id="ch"></svg>
+<div >
+
   <p class="">COVID 19 has created a lot of problems in the economy. 
     That problem is reflected in the stock market, as we can see in the chart. 
     It shows the movement of the S&P 500 this year with the COVID, and at the same time last year, 
     you can click in here to see the different scenes that demonstrate the effect.</p>
     <button onclick="update(data1)">S&P 500 in COVID 19</button>
+    <p>
+
+    </p>
 
     <button onclick="update(data2)">S&P 500 in normal time</button>
   <p>As you can appreciate by month 7(July), the S&P 500 still at the same levels that were last year, 
-    but the history of this index tells us that it grows an average of  8% every year. So clearly we 
-    can see the impact of the COVID 19 in the economy. </p>
+    but the history of this index tells us that it grows an average of  8% every year. So clearly, we 
+    can conclude that the impact of COVID 19 in the economy is big enough to stop the country's growth 
+    for more than a year.. </p>
 
 </div>
 
@@ -39,6 +46,7 @@
 </div>
 
 <script>
+
 
     var data1 = [
        {ser1: 1, ser2: 3225.52},
@@ -63,7 +71,7 @@
     
     
     var margin = {top: 10, right: 30, bottom: 30, left: 50},
-        width = 460 - margin.left - margin.right,
+        width = 600 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
     
     
@@ -121,11 +129,43 @@
           .x(function(d) { return x(d.ser1); })
           .y(function(d) { return y(d.ser2); }))
           .attr("fill", "none")
-          .attr("stroke", "steelblue")
+          .attr("stroke", "#69b3a2")
           .attr("stroke-width", 2.5)
+        
     }
    
     update(data1)
+
+    const annotations3 = [
+  {
+    note: {
+      label: "S&P 500 index at the same level in both year in the U.S, but It was expected to grows 8% by 2020",
+      align: "middle", 
+      wrap: 200,  
+      padding: 10  
+    },
+
+    connector: {
+             
+      type: "line",      
+      lineType : "vertical", 
+      endScale: 5 
+    },
+    color: ["#2E4053"],
+    x: 0,
+    y: 225,
+    dy: 30,
+    dx: 100,
+    subject: { radius: 50, radiusPadding: 10 },
+  }
+]
+
+// Add annotation to the chart
+const makeAnnotations3 = d3.annotation()
+  .annotations(annotations3)
+d3.select("#ch")
+  .append("g")
+  .call(makeAnnotations3)
     
     </script>
 
